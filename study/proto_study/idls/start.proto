@@ -1,0 +1,11 @@
+// Author: edward.lei
+//
+
+syntax = "proto3";
+
+option cc_enable_arenas = true;
+
+message Start{
+    int32 i32 = 1 ;
+    string str = 2;
+}

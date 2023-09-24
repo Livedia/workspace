@@ -1,0 +1,15 @@
+**/merger_build
+**/carbon
+**/third_party
+**/bazel-*
+**/bazel_*
+**/log
+**/oxygen
+**/.vscode
+**/server_*
+**/client_*
+**/compile_commands.json
+**/.cache
+**/fast_message
+**/note
+.DS_Store
