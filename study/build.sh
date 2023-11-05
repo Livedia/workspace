@@ -9,18 +9,20 @@ node=$2
 
 
 function BuildAndRun(){
-  bazel build bazel_study/$packg:$node
+  bazel build $1/$packg:$node
+
+
 
   if [ $? -eq 0 ] ; then
     echo "build $node successful !"
-    if [ -f $node ] ; then
+    if [ -f "exe_$node" ] ; then
       echo "rm the outdate file: $node"
       rm -f "exe_$node"
     fi
     echo "---- run $node, the result is below: ----"
-    cp bazel-bin/bazel_study/$packg/$node "exe_$node" && ./"exe_$node"
+    cp bazel-bin/$1/$packg/$node "exe_$node" && ./"exe_$node"
   fi
   return 0
 }
 
-BuildAndRun
+BuildAndRun study_bazel
