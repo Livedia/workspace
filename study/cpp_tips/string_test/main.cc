@@ -13,7 +13,7 @@ namespace cstring_test {
 
 /* 打印字符串中的内容 */
 void PrintStr(const char* name, const char* str) {
-  // ascii 码中 0-31 和 127 是控制字符或通讯专用的字符，无法显示在控制台中,所以还需强转 int 类型来打印
+  // ascii 码中 0-31 和 127 是控制字符或通讯专用的字符，无法显示在控制台中，所以还需强转 int 类型来打印
   cout << "-- " << name << " sizeof() is:" << sizeof(str) << ", strlen() is" << strlen(str) << ", value is:" << str
        << endl;
   for (int i = 0; i < strlen(str); ++i) {
@@ -36,7 +36,7 @@ void InitChar() {
 }
 
 void InitCharArray() {
-  // 声明一个字符数组，由于没有初始化，其中元素的值是未知的，使用strlen()来计算大小的时候遇到`\0`就截止了
+  // 声明一个字符数组，由于没有初始化，其中元素的值是未知的，使用 strlen() 来计算大小的时候遇到`\0`就截止了
   // 调用 PrintStr 函数的时候，str 代表的数组退化为了指针，所以函数中再次使用 sizeof 来计算的时候大小就变成指针的大小了
   char str[10];
   PrintStr("str", str);
@@ -57,17 +57,18 @@ void InitCharArray() {
 
 void InitCharPointer() {
   // 字符串指针
-  // 字符串常量赋值给 char* 指针可能会存在误修改的风险(*cp=xx 是不合法的)
+  // 字符串常量赋值给 char* 指针可能会存在误修改的风险 (*cp=xx 是不合法的)
   char* cp = "pointer";
   cout << "cp sizeof() is:" << sizeof(cp) << ", strlen() is:" << strlen(cp) << ", value is:" << cp
        << ", *cp sizeof() is:" << sizeof(*cp) /*<< ", strlen() is:" << strlen(*cp)*/ << ", value is:" << *cp
-       << ", 常量字符串最后一位+1 字符为：" << cp[strlen(cp)] << "该字符 int 值为：" << int(cp[strlen(cp)]) << endl;
+       << ", 常量字符串最后一位 +1 字符为：" << cp[strlen(cp)] << "该字符 int 值为：" << int(cp[strlen(cp)]) << endl;
 
   const char* cp2 = "const";
-  // sizeof(cp2) 计算的是指针的大小，cp2 所指对象占用内存空间为: strlen(cp2) + 1;
+  // sizeof(cp2) 计算的是指针的大小，cp2 所指对象占用内存空间为：strlen(cp2) + 1;
   cout << "cp2 sizeof() is:" << sizeof(cp2) << ", strlen() is:" << strlen(cp2) << ", value is:" << cp2
        << ", *cp2 sizeof() is:" << sizeof(*cp2) /*<< ", strlen() is:" << strlen(*cp2)*/ << ", value is:" << *cp2
-       << ", 常量字符串最后一位+1 字符为：" << cp2[strlen(cp2)] << "该字符 int 值为：" << int(cp2[strlen(cp2)]) << endl;
+       << ", 常量字符串最后一位 +1 字符为：" << cp2[strlen(cp2)] << "该字符 int 值为：" << int(cp2[strlen(cp2)])
+       << endl;
 }
 
 void Init() {
@@ -92,8 +93,8 @@ void MemcpyTest(const char* str) {
 
 void StrcpyTest(const char* str) {
   // strncpy(char* dest, const char* src)
-  // 将源字符串复制到目标字符串中，包括空字符('\0')。
-  // 使用 strcpy 来复制字符串,不论空间够不够，都会往后写，这是很危险的行为！
+  // 将源字符串复制到目标字符串中，包括空字符 ('\0')。
+  // 使用 strcpy 来复制字符串，不论空间够不够，都会往后写，这是很危险的行为！
   char str_strcpy[10];
   char str_strcpy2[30];
   char s;
@@ -109,14 +110,14 @@ void StrcpyTest(const char* str) {
 
 void StrcatTest() {
   // strcat(char* dest, const char* src)
-  // 将源字符串连接到目标字符串的末尾，包括空字符('\0')
+  // 将源字符串连接到目标字符串的末尾，包括空字符 ('\0')
   // 使用 strcat 来拼接字符串
   char str_strcat1[20] = "hello";
   char str_strcat2[20] = "world";
   strcat(str_strcat1, str_strcat2);
   PrintStr("str_strcat1", str_strcat1);
 
-  // 目标字符串空间不足的情况,会导致缓冲区溢出，产生未定义的行为!
+  // 目标字符串空间不足的情况，会导致缓冲区溢出，产生未定义的行为！
   char str_strcat3[6] = "hello";
   strcat(str_strcat3, str_strcat2);
   PrintStr("str_strcat3", str_strcat3);
@@ -240,7 +241,7 @@ void StrtokTest() {
   PrintStr("token4", token4);
   PrintfByN(str, 24);
 
-  // 常见用法:
+  // 常见用法：
   char example[] = "Hello,World,How,Are,You";
   const char* d = ",";
   char* token = strtok(example, d);
@@ -279,9 +280,17 @@ void PrintStr(const std::string& name, const std::string& str) {
 }
 
 void Init() {
+  // 常量字符串初始化
   std::string str = "const string";
+  // std::string 对象大小为 24 字节，其中包含一个 size ,不同编译器实现版本不同，gcc 是
+  // 字符串长度 + 字符串容量 + 字符串内容
+  cout << "sizeof(str)=" << sizeof(str) << endl;
   PrintStr("str", str);
-  cout << "out range" << str[10] << "|" << endl;
+  // 使用 [] 依旧可以访问到未知的内存
+  cout << "out range:" << str[10] << "|" << endl;
+  // 可以使用 [] 来直接进行修改，str 不是指针了 str+3 这种无法使用
+  str[5] = '_';
+  PrintStr("changed_str", str);
 }
 
 void Test() { Init(); }
