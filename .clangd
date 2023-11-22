@@ -1,0 +1,5 @@
+{
+  "CompileFlags": [
+    "-std=c++17"
+  ]
+}
