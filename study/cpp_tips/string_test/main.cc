@@ -279,21 +279,126 @@ void PrintStr(const std::string& name, const std::string& str) {
   cout << endl;
 }
 
+void CommonFunctionTest(){
+  std::string str("this is test string");
+
+  cout << "返回字符串大小,size()" << str.size() << endl;
+  cout << "与 size 完全一样,length():" << str.length() << endl;
+  cout << "strlen 结果:" << strlen(str.c_str()) << endl;
+  cout << "empty is:" << str.empty();
+  PrintStr("common test, str", str);
+
+  // 插入： insert（位置，字符串）
+  str.insert(3, "IIIII");
+  PrintStr("common test, after insert str", str);
+
+  // 删除： erase(起始位置，个数)
+  str.erase(3, 5);
+  PrintStr("common test, after erase str", str);
+
+  // 替换： replace(起始位置，个数 n，替换的字符串) 从起始位置开始 n 个字符被替换为要替换的字符串
+  str.replace(5, 2, "was");
+  PrintStr("common test, after replace str", str);
+
+  // 查找： find(字符串，起始位置) 返回找到第一个字符串的起始位置
+  // 第二个参数默认为 0，没找到会返回 std::string::nopose (-1)
+  int ret = str.find("was");
+  std::cout << "common test, find `was` in pose: " << ret << endl;
+  // rfind() 从尾部开始查找
+
+  // 截取子字符串：substr(起始位置，字符串个数)
+  std::string subs = str.substr(3, 5);
+  PrintStr("common test, substr(3,5)", subs);
+}
+
+void OtherFunctionTest(){
+  // 字符串比较
+  using std::string;
+  string str1("abcd");
+  string str2("acde");
+
+  if(str1 == str2) {
+    cout << "str1 == str2\n";
+  }
+  if (str1 > str2) {
+    cout << "str1 > str2\n";
+  }
+  if (str1 < str2) {
+    cout << "str1 < str2\n";
+  }
+
+  // 使用 compare 方法 等于0 大于1 小于-1
+  int ret = str1.compare(str2);
+  switch (ret)
+  {
+  case 0:
+    cout << "str1 == str2\n";
+    break;
+  case 1:
+    cout << "str1 > str2\n";
+    break;
+  case -1:
+    cout << "str1 < str2\n";
+    break;
+  default:
+       break;
+  }
+
+  // 字符串转换
+  string number_str("123");
+  int num = std::stoi(number_str);
+  cout << "std::stoi(number_str): " << num << endl;
+
+  string number_str2("123.45");
+  float num2 = std::stof(number_str);
+  cout << "std::stof(number_str2): " << num2 << endl;
+
+  string number_str3("123.456789123");
+  double num3 = std::stod(number_str3);
+  cout << "std::stod(number_str3)" << num3 << endl;
+
+  // 读取输入
+  string line;
+  std::getline(std::cin, line);
+  cout << "the word you put is: " << line << endl;
+
+  // 转换大小写
+  string test("Hello String!");
+  PrintStr("test origin", test);
+  for(auto& it : test){
+    it = toupper(it);
+  }
+  PrintStr("test after toupper", test);
+  for(auto& it: test) {
+    it = tolower(it);
+  }
+  PrintStr("test after tolower", test);
+}
+
+void FunctionUsage() {
+  CommonFunctionTest();
+  OtherFunctionTest();
+}
+
 void Init() {
   // 常量字符串初始化
-  std::string str = "const string";
+  std::string str = "abc def ghi";
+  std::string str2{"aaa"};
   // std::string 对象大小为 24 字节，其中包含一个 size ,不同编译器实现版本不同，gcc 是
   // 字符串长度 + 字符串容量 + 字符串内容
   cout << "sizeof(str)=" << sizeof(str) << endl;
   PrintStr("str", str);
   // 使用 [] 依旧可以访问到未知的内存
-  cout << "out range:" << str[10] << "|" << endl;
+  cout << "out range:" << str[100] << "|" << endl;
   // 可以使用 [] 来直接进行修改，str 不是指针了 str+3 这种无法使用
   str[5] = '_';
   PrintStr("changed_str", str);
 }
 
-void Test() { Init(); }
+void Test() {
+  Init();
+  FunctionUsage();
+}
 }  // namespace cppstring_test
 
 int main() {
